@@ -21,13 +21,17 @@ export class BooksService {
   }
 
   async findOne(id: string): Promise<Book> {
-    const book = await this.booksRepository.findOne({ where: { id } });
+    try {
+      const book = await this.booksRepository.findOne({ where: { id } });
 
-    if (!book) {
-      throw new NotFoundException();
+      if (!book) {
+        throw new NotFoundException();
+      }
+
+      return book;
+    } catch (err) {
+      throw err;
     }
-
-    return book;
   }
 
   async create(data: CreateBookDto): Promise<Book> {
@@ -41,26 +45,34 @@ export class BooksService {
   }
 
   async update(id: string, data: UpdateBookDto): Promise<boolean> {
-    const book = await this.booksRepository.findOne({ where: { id } });
+    try {
+      const book = await this.booksRepository.findOne({ where: { id } });
 
-    if (!book) {
-      throw new NotFoundException();
+      if (!book) {
+        throw new NotFoundException();
+      }
+
+      const { affected } = await this.booksRepository.update(id, data);
+
+      return affected === 0 ? false : true;
+    } catch (err) {
+      throw err;
     }
-
-    const { affected } = await this.booksRepository.update(id, data);
-
-    return affected === 0 ? false : true;
   }
 
   async remove(id: string): Promise<boolean> {
-    const book = await this.booksRepository.findOne({ where: { id } });
+    try {
+      const book = await this.booksRepository.findOne({ where: { id } });
 
-    if (!book) {
-      throw new NotFoundException();
+      if (!book) {
+        throw new NotFoundException();
+      }
+
+      const { affected } = await this.booksRepository.delete(id);
+
+      return affected === 0 ? false : true;
+    } catch (err) {
+      throw err;
     }
-
-    const { affected } = await this.booksRepository.delete(id);
-
-    return affected === 0 ? false : true;
   }
 }
