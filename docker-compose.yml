@@ -18,8 +18,8 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./api:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./api:/usr/src/app/api
+      - /usr/src/app/api/node_modules
     restart: unless-stopped
 
   postgres:
@@ -34,3 +34,16 @@ services:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+
+  dashboard:
+    container_name: "books-dashboard"
+    image: "books-dashboard"
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    volumes:
+      - ./dashboard:/usr/src/app/dashboard
+      - /usr/src/app/dashboard/node_modules
+    ports:
+      - 80:80
+    restart: always
