@@ -11,6 +11,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new LoggingInterceptor());
 
+  app.enableCors({
+    origin: true,
+  });
+
   const config = app.get(ConfigService);
   const port = config.get<number>('port');
 
